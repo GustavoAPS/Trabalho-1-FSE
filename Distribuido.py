@@ -1,63 +1,71 @@
+import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((socket.gethostname(), 1234))
+msg = s.recv(1024)
+print(msg.decode("utf-8"))
+
+numero_sala = 0
+lampada_01 = False
+lampada_02 = False
+ar_condicionado = False
+projetor = False
+alarme_buzzer = False
+sensor_presenca = False
+sensor_fumaca = False
+sensor_janela_01 = False
+sensor_janela_02 = False
+sensor_contagem_pessoas_entrada = False
+sensor_contagem_pessoas_saida = False
+sensor_temperatura_humidade = False
 
 
-class ServidorDistribuido:
-    def __init__(self, numero):
-        self.numero_sala = numero
-        self.lampada_01 = False
-        self.lampada_02 = False
-        self.ar_condicionado = False
-        self.projetor = False
-        self.alarme_buzzer = False
-        self.sensor_presenca = False
-        self.sensor_fumaca = False
-        self.sensor_janela_01 = False
-        self.sensor_janela_02 = False
-        self.sensor_contagem_pessoas_entrada = False
-        self.sensor_contagem_pessoas_saida = False
-        self.sensor_temperatura_humidade = False
+def apresentar_relatorio_sala(self):
 
-    def apresentar_relatorio_sala(self):
+    print(".")
+    print(f"Relatorio da Sala {numero_sala}")
+    printar_status("Lampada 01             | ", lampada_01)
+    printar_status("Lampada 02             | ", lampada_02)
+    printar_status("Ar condicionado        | ", ar_condicionado)
+    printar_status("Projetor               | ", projetor)
+    printar_status("Alarme                 | ", alarme_buzzer)
+    printar_status("Sensor presenca        | ", sensor_presenca)
+    printar_status("Sensor fumaca          | ", sensor_fumaca)
+    printar_status("Sensor janela 01       | ", sensor_janela_01)
+    printar_status("Sensor janela 02       | ", sensor_janela_02)
+    printar_status("Sensor entrada pessoas | ", sensor_contagem_pessoas_entrada)
+    printar_status("Sensor saida pessoas   | ", sensor_contagem_pessoas_saida)
+    printar_status("Sensor temperatura     | ", sensor_temperatura_humidade)
+    print(".")
 
-        print(".")
-        print(f"Relatorio da Sala {self.numero_sala}")
-        self.printar_status("Lampada 01 - ", self.lampada_01)
-        self.printar_status("Lampada 02 - ", self.lampada_02)
-        self.printar_status("Ar condicionado - ", self.ar_condicionado)
-        self.printar_status("Projetor - ", self.projetor)
-        self.printar_status("Alarme - ", self.alarme_buzzer)
-        self.printar_status("Sensor presenca - ", self.sensor_presenca)
-        self.printar_status("Sensor fumaca - ", self.sensor_fumaca)
-        self.printar_status("Sensor janela 01 - ", self.sensor_janela_01)
-        self.printar_status("Sensor janela 02 - ", self.sensor_janela_02)
-        self.printar_status("Sensor entrada pessoas - ", self.sensor_contagem_pessoas_entrada)
-        self.printar_status("Sensor saida pessoas - ", self.sensor_contagem_pessoas_saida)
-        self.printar_status("Sensor temperatura - ", self.sensor_temperatura_humidade)
-        print(".")
+def printar_status(self, aparelho: str, estado: bool):
+    if estado:
+        print(f"{aparelho} ligado")
+    else:
+        print(f"{aparelho} desligado")
 
-    def printar_status(self, aparelho: str, estado: bool):
-        if estado:
-            print(f"{aparelho} ligado")
-        else:
-            print(f"{aparelho} desligado")
-
-    def interruptor_aparelhos(self, aparelho: str, estado: bool):
-      return True
-
-    def liga_primeira_lampada(self):
-        self.lampada_01 = True
-
-    def desliga_primeira_lampada(self):
-        self.lampada_01 = False
-
-    def liga_segunda_lampada(self):
-        self.lampada_02 = True
-
-    def desliga_segunda_lampada(self):
-        self.lampada_02 = False
-
-    def liga_ar_condicionado(self):
-        self.ar_condicionado = True
-
-    def desliga_ar_condicionado(self):
-        self.ar_condicionado = False
+def interruptor_aparelhos(self, aparelho: int, estado: bool):
+    if aparelho == '0':
+        lampada_01 = estado
+    if aparelho == '1':
+        lampada_02 = estado
+    if aparelho == '2':
+        ar_condicionado = estado
+    if aparelho == '3':
+        projetor = estado
+    if aparelho == '4':
+        alarme_buzzer = estado
+    if aparelho == '5':
+        sensor_presenca = estado
+    if aparelho == '6':
+        sensor_fumaca = estado
+    if aparelho == '7':
+        sensor_janela_01 = estado
+    if aparelho == '8':
+        sensor_janela_02 = estado
+    if aparelho == '9':
+        sensor_contagem_pessoas_entrada = estado
+    if aparelho == '10':
+        sensor_contagem_pessoas_saida = estado
+    if aparelho == '11':
+        sensor_temperatura_humidade = estado
 
