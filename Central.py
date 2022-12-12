@@ -1,13 +1,17 @@
 import socket
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((socket.gethostname(), 1234))
-s.listen(5)
+serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+serverSocket.bind((socket.gethostname(), 1234))
+serverSocket.listen(5)
 
 while True:
-    clientsocket, address = s.accept()
-    print(f"connection from {address} has been established")
-    clientsocket.send(bytes("welcome to the server", "utf-8"))
+    (clientConnected, clientAddress) = serverSocket.accept()
+    print("Accepted a connection request from %s:%s"%(clientAddress[0], clientAddress[1]))
+
+    dataFromClient = clientConnected.recv(1024)
+    print(dataFromClient.decode());
+
+    clientConnected.send(bytes("welcome to the server", "utf-8"))
 
 # sala_01 = ServidorDistribuido(1)
 # sala_02 = ServidorDistribuido(2)
