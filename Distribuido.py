@@ -10,6 +10,7 @@ numero_sala = 0
 
 lampada_1_ligada = False
 led_1 = LED(18)
+led_2 = LED(23)
 
 lampada_02 = False
 ar_condicionado = False
@@ -48,7 +49,7 @@ def ligar_lampadas():
 
 def desligar_lampadas():
     led_1.off()
-    led_1.off()
+    led_2.off()
 
 
 def printar_status( aparelho: str, estado: bool):
