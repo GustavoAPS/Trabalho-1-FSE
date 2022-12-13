@@ -1,22 +1,27 @@
+import threading
 import socket
+from time import sleep
 
-serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serverSocket.bind((socket.gethostname(), 1234))
-serverSocket.listen(5)
 
-while True:
-    (clientConnected, clientAddress) = serverSocket.accept()
-    print("Accepted a connection request from %s:%s"%(clientAddress[0], clientAddress[1]))
+def NetworkServerServe(message):
+    serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    serverSocket.bind((socket.gethostname(), 1234))
+    serverSocket.listen(5)
 
-    dataFromClient = clientConnected.recv(1024)
-    print(dataFromClient.decode());
+    while True:
+        (clientConnected, clientAddress) = serverSocket.accept()
+        print("Accepted a connection request from %s:%s"%(clientAddress[0], clientAddress[1]))
 
-    clientConnected.send(bytes("welcome to the server", "utf-8"))
+        dataFromClient = clientConnected.recv(1024)
+        print(dataFromClient.decode());
+        
+        clientConnected.send(bytes(message_to_client, "utf-8"))
+        sleep(.5)
+        
+message_to_client = "adagio"
+t = threading.Thread(target=NetworkServerServe, args=(message_to_client, ))
+t.start()
 
-# sala_01 = ServidorDistribuido(1)
-# sala_02 = ServidorDistribuido(2)
-# sala_03 = ServidorDistribuido(3)
-# sala_04 = ServidorDistribuido(4)
 
 
 def relatorio_sala():
@@ -44,41 +49,43 @@ def relatorio_todas_salas():
     # sala_03.apresentar_relatorio_sala()
     # sala_04.apresentar_relatorio_sala()
 
+def enviar_mensagem_cliente():
+    message_to_client = input("Qual mensagem deseja enviar?")
+
 
 def ligar_desligar_aparelhos():
-    pass
-    # sala = input("Qual sala voce deseja ligar-desligar aparelhos? \n[1,2,3,4]\n")
-    # aparelho = input("Qual aparelho voce deseja ligar-desligar? \n"
-    #                     "0 = lampada_01\n"
-    #                     "1 = lampada_02\n"
-    #                     "2 = ar_condicionado\n"
-    #                     "3 = projetor\n"
-    #                     "4 = alarme_buzzer\n"
-    #                     "5 = sensor_presenca\n"
-    #                     "6 = sensor_fumaca\n"
-    #                     "7 = sensor_janela_01\n"
-    #                     "8 = sensor_janela_02\n"
-    #                     "9 = sensor_contagem_pessoas_entrada\n"
-    #                     "10 = sensor_contagem_pessoas_saida\n"
-    #                     "11 = sensor_temperatura_humidade\n")
-    #
-    # estado = input("O que voce deseja fazer \n 0 = desligar\n1 = ligar")
-    #
-    # operacao = True
-    # if estado == '0':
-    #     operacao = False
-    #
-    # if sala == '1':
-    #     sala_01.interruptor_aparelhos(aparelho, operacao)
-    #
-    # if sala == '2':
-    #     sala_02.interruptor_aparelhos(aparelho, operacao)
-    #
-    # if sala == '3':
-    #     sala_03.interruptor_aparelhos(aparelho, operacao)
-    #
-    # if sala == '4':
-    #     sala_04.interruptor_aparelhos(aparelho, operacao)
+    sala = input("Qual sala voce deseja ligar-desligar aparelhos? \n[1,2,3,4]\n")
+    aparelho = input("Qual aparelho voce deseja ligar-desligar? \n"
+                        "0 = lampada_01\n"
+                        "1 = lampada_02\n"
+                        "2 = ar_condicionado\n"
+                        "3 = projetor\n"
+                        "4 = alarme_buzzer\n"
+                        "5 = sensor_presenca\n"
+                        "6 = sensor_fumaca\n"
+                        "7 = sensor_janela_01\n"
+                        "8 = sensor_janela_02\n"
+                        "9 = sensor_contagem_pessoas_entrada\n"
+                        "10 = sensor_contagem_pessoas_saida\n"
+                        "11 = sensor_temperatura_humidade\n")
+    
+    estado = input("O que voce deseja fazer \n 0 = desligar\n1 = ligar")
+    
+    operacao = True
+    if estado == '0':
+        operacao = False
+    
+    if sala == '1':
+        sala_01.interruptor_aparelhos(aparelho, operacao)
+    
+    if sala == '2':
+         sala_02.interruptor_aparelhos(aparelho, operacao)
+    
+    if sala == '3':
+        sala_03.interruptor_aparelhos(aparelho, operacao)
+    
+    if sala == '4':
+        sala_04.interruptor_aparelhos(aparelho, operacao)
 
 
 
@@ -89,6 +96,7 @@ while controle != '0':
     print("1 - Ligar ou Desligar Aparelhos")
     print("2 - relatorio de sala")
     print("3 - relatorio de todas as salas")
+    print("4 - enviar mensagem para cliente")
     print("0 - Encerrar")
 
     controle = input()
@@ -101,3 +109,6 @@ while controle != '0':
 
     if controle == '3':
         relatorio_todas_salas()
+
+    if controle == '4':
+        enviar_mensagem_cliente()

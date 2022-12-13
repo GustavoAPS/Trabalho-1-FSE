@@ -1,39 +1,29 @@
-#----- A simple TCP client program in Python using send() function -----
-
+import threading
 import socket
 
-# Create a client socket
 
-clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
+class NetworkClient:
+    def serve(self):
+        
+        clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
 
-# Connect to the server
+        clientSocket.connect((socket.gethostname(), 1234));
 
-clientSocket.connect((socket.gethostname(), 1234));
+        data = "Hello Server!";
 
-# Send data to server
+        while True:
+            clientSocket.send(data.encode());
 
-data = "Hello Server!";
+            dataFromServer = clientSocket.recv(1024);
 
-clientSocket.send(data.encode());
-
-
-# Receive data from server
-
-dataFromServer = clientSocket.recv(1024);
-
-# Print to the console
-
-print(dataFromServer.decode());
+            print(dataFromServer.decode());
 
 
+    def __init__(self):
+        t = threading.Thread(target=self.serve)
+        t.start()
 
-
-
-
-
-
-
-
+NetworkClient()
 
 
 
