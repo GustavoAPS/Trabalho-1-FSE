@@ -1,26 +1,28 @@
 import threading
 import socket
+from csv import writer
 from time import sleep
+from datetime import datetime
+from os.path import exists
 
 
-def NetworkServerServe(message):
-    serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serverSocket.bind((socket.gethostname(), 1234))
-    serverSocket.listen(5)
-
-    while True:
-        (clientConnected, clientAddress) = serverSocket.accept()
-        print("Accepted a connection request from %s:%s"%(clientAddress[0], clientAddress[1]))
-
-        dataFromClient = clientConnected.recv(1024)
-        print(dataFromClient.decode());
-        
-        clientConnected.send(bytes(message_to_client, "utf-8"))
-        sleep(.5)
-        
-message_to_client = "adagio"
-t = threading.Thread(target=NetworkServerServe, args=(message_to_client, ))
-t.start()
+# reponsabilidades:
+#
+# 1 - Manter conexao com distribuido
+#
+# 2 - Prover uma interface que mantenham atualizadas as seguintes informações:
+#   2.1 Estado das entradas (Sensores)
+#   2.2 Estado das Saídas (lâmpadas, aparelhos de ar, etc.)
+#   2.3 Valor da temperatura e umidade de cada sala a cada 2 segundos
+#   2.4 Contador de Ocupação (Número de Pessoas) presentes no prédio como um todo e a ocupação individual de cada sala
+#
+# 3 - Prover mecanismo de interface para:
+#   3.1 - Acionar manualmente lâmpadas, aparelhos de ar-condicionado e projetores das salas;
+#   3.2 - Acionamento do sistema de alarme que, quando estiver ligado, deve tocar um som de alerta (acionar a sirene/buzzer) ao detectar presenças ou abertura de portas/janelas;
+#   3.3 - Acionamento de alarme de incêncio que, ao detectar presença de fumaça a qualquer momento deve soar o alarme;
+#
+# 4 - Manter log (em arqvuio CSV) dos comandos acionados pelos usuários e do acionamento dos alarmes com data e hora e cada evento;
+#
 
 
 
@@ -49,54 +51,77 @@ def relatorio_todas_salas():
     # sala_03.apresentar_relatorio_sala()
     # sala_04.apresentar_relatorio_sala()
 
-def enviar_mensagem_cliente():
-    message_to_client = input("Qual mensagem deseja enviar?")
+
+# funcionando direitinho
+def registrar_log(mensagem_registro):
+
+    if exists('log.csv') == False:
+        with open('log.csv','w', encoding='UTF8') as log_file:
+            writter = writer(log_file)
+            data = ["mensagem", "data do registro", "hora do registro"]
+            writter.writerow(data)
+
+    now = datetime.now()
+    
+    # dd/mm/YY H:M:S
+    data_do_registro = now.strftime("%d/%m/%Y")
+    hora_do_registro = now.strftime("%H:%M:%S")
+
+    List = [mensagem_registro, data_do_registro, hora_do_registro]
+    
+    with open('log.csv', 'a') as f_object:
+    
+        writer_object = writer(f_object)    
+        writer_object.writerow(List)
+        f_object.close()
+
+
 
 
 def ligar_desligar_aparelhos():
+
     sala = input("Qual sala voce deseja ligar-desligar aparelhos? \n[1,2,3,4]\n")
+
     aparelho = input("Qual aparelho voce deseja ligar-desligar? \n"
                         "0 = lampada_01\n"
                         "1 = lampada_02\n"
                         "2 = ar_condicionado\n"
-                        "3 = projetor\n"
-                        "4 = alarme_buzzer\n"
-                        "5 = sensor_presenca\n"
-                        "6 = sensor_fumaca\n"
-                        "7 = sensor_janela_01\n"
-                        "8 = sensor_janela_02\n"
-                        "9 = sensor_contagem_pessoas_entrada\n"
-                        "10 = sensor_contagem_pessoas_saida\n"
-                        "11 = sensor_temperatura_humidade\n")
+                        "3 = projetor\n")
     
-    estado = input("O que voce deseja fazer \n 0 = desligar\n1 = ligar")
+    estado = input("O que voce deseja fazer \n1 = ligar\n0 = desligar\n")
     
     operacao = True
+    
     if estado == '0':
         operacao = False
     
     if sala == '1':
-        sala_01.interruptor_aparelhos(aparelho, operacao)
+        print("Chamar funcao de ligar aparelho")
+        #sala_01.interruptor_aparelhos(aparelho, operacao)
     
     if sala == '2':
-         sala_02.interruptor_aparelhos(aparelho, operacao)
+        print("Chamar funcao de ligar aparelho")
+         #sala_02.interruptor_aparelhos(aparelho, operacao)
     
     if sala == '3':
-        sala_03.interruptor_aparelhos(aparelho, operacao)
+        print("Chamar funcao de ligar aparelho")
+        #sala_03.interruptor_aparelhos(aparelho, operacao)
     
     if sala == '4':
-        sala_04.interruptor_aparelhos(aparelho, operacao)
-
+        print("Chamar funcao de ligar aparelho")
+        #sala_04.interruptor_aparelhos(aparelho, operacao)
 
 
 controle = '1'
 
 while controle != '0':
+
     print("Menu")
     print("1 - Ligar ou Desligar Aparelhos")
     print("2 - relatorio de sala")
     print("3 - relatorio de todas as salas")
     print("4 - enviar mensagem para cliente")
+    print("5 - Registrar log")
     print("0 - Encerrar")
 
     controle = input()
@@ -112,3 +137,7 @@ while controle != '0':
 
     if controle == '4':
         enviar_mensagem_cliente()
+    
+    if controle == '5':
+        mensagem = input("o que deseja registrar no log?")
+        registrar_log(mensagem)
