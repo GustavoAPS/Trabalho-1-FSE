@@ -103,32 +103,6 @@ def apresentar_relatorio_sala():
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 def leitor_temperatura():
-
-    #if(sala=='1' or sala=='3'):
-    dhtDevice = adafruit_dht.DHT22(board.D4)
-    #elif(sala=='2' or sala=='4'):
-    #dhtDevice = adafruit_dht.DHT22(board.D18)
-
-    while True:
-        try:
-            temperature_c = dhtDevice.temperature
-            temperature_f = temperature_c * (9 / 5) + 32
-            humidity = dhtDevice.humidity
-            print(
-                "Temperatura: {:.1f} F / {:.1f} C    Umidade: {}% ".format(
-                    temperature_f, temperature_c, humidity
-                )
-            )
-            break
-
-        except RuntimeError as error:
-            print(error.args[0])
-            continue
-        except Exception as error:
-            dhtDevice.exit()
-            raise error
-
-
     dict_relatorio = {'Temperatura':random.uniform(-10,40)}
     return dict_relatorio
 
