@@ -38,8 +38,8 @@ def serve(lampada_1):
         #print(dataFromServer.decode())
 
         function_dict = json.loads(dataFromServer.decode())
-        print(type(function_dict))
-        print(function_dict)
+        #print(type(function_dict))
+        #print(function_dict)
 
         if "ligar_desligar_aparelho" in function_dict.keys():
             print("Key ligar_desligar_aparelho encontrada")
@@ -143,8 +143,8 @@ def interruptor_aparelhos( aparelho: int, estado: bool):
     if aparelho == 3:
         if estado:
             print("Ligando Projetor")
-            led_3.on()
+            led_4.on()
         else:
             print("Desligando Projetor")
-            led_3.off()
+            led_4.off()
    
