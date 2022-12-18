@@ -106,13 +106,13 @@ def leitor_temperatura():
 def interruptor_aparelhos( aparelho: int, estado: bool):
 
     #lampada 1
-    led_1 = LED(18)
+    led_1 = LED(26)
     #lampada 2
-    led_2 = LED(23)
+    led_2 = LED(19)
     #ar condicionado
-    led_3 = LED(25)
+    led_3 = LED(6)
     #projetor
-    led_4 = LED(24)
+    led_4 = LED(2)
 
     print(f"Interruptor chamado, aparelho {aparelho} estado {estado}")
 
