@@ -5,7 +5,8 @@ import random
 import board
 import adafruit_dht
 
-from gpiozero import LED
+
+from gpiozero import LED, Button
 
 
 numero_sala = 0
@@ -148,3 +149,13 @@ def interruptor_aparelhos( aparelho: int, estado: bool):
             print("Desligando Projetor")
             led_4.off()
    
+
+
+button = Button(11)
+
+while True:
+    if button.is_pressed:
+        print("Fumaca detectada")
+    else:
+        pass
+        print("Button is not pressed")
