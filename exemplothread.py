@@ -3,50 +3,42 @@ from time import sleep
 import socket
 
 
-message_to_client = "adagio"
-my_var = [1, 2, 3]
+my_var = []
 event = Event()
 
 
-def NetworkServerServe(message):
-    serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serverSocket.bind((socket.gethostname(), 1234))
-    serverSocket.listen(5)
+serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+serverSocket.bind((socket.gethostname(), 1234))
+serverSocket.listen(5)
 
+(clientConnected, clientAddress) = serverSocket.accept()
+
+def send_messages(message:list):
     while True:
-        (clientConnected, clientAddress) = serverSocket.accept()
+        if len(message) != 0:
+            clientConnected.send(bytes(message[len(message) - 1], "utf-8"))
+            message.pop()
 
-        print("Accepted a connection request from %s:%s"%(clientAddress[0], clientAddress[1]))
-        
-        clientConnected.send(bytes(message_to_client, "utf-8"))
-
+def receive_messages():
+    while True:
         dataFromClient = clientConnected.recv(1024)
+        print(dataFromClient.decode())
+         
 
-        print(dataFromClient.decode());
-        
-        print("Rodando")
-        sleep(.5)
-
-
-def Numbers(var):
-    while True:
-        for i in range(len(var)):
-            var[i] += 1
-        if event.is_set():
-            break
-        sleep(.5)
-    print('Stop printing')        
-
-
-t = Thread(target=NetworkServerServe, args=(message_to_client, ))
+t = Thread(target=send_messages, args=(my_var, ))
 t.start()
+
+t2 = Thread(target=receive_messages)
+t2.start()
+
 
 
 while True:
     try:
-        message_to_client = input("What is the message")
+        my_var.append(input("What is the message "))
     except KeyboardInterrupt:
         event.set()
         break
 t.join()
+t2.join()
 print(my_var)

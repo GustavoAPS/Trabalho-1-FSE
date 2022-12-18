@@ -1,86 +1,95 @@
 import threading
 import socket
 import json
-from gpiozero import LED
-
-class NetworkClient:
-    def serve(self):
-        
-        clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
-
-        clientSocket.connect((socket.gethostname(), 1234));
-
-        while True:
-
-            response = ""
-
-            dataFromServer = clientSocket.recv(1024)
-
-            print(dataFromServer.decode())
-
-            if dataFromServer.decode() == '1':
-                response = apresentar_relatorio_sala()
-            else:
-                response = "Default response"
-
-            clientSocket.send(response.encode())
-
-
-    def __init__(self):
-        t = threading.Thread(target=self.serve)
-        t.start()
-
-NetworkClient()
-
+import random
+#from gpiozero import LED
 
 
 numero_sala = 0
 
-lampada_1_ligada = False
 #led_1 = LED(18)
 #led_2 = LED(23)
-
-lampada_02 = False
+lampada_1 = False
+lampada_2 = False
 ar_condicionado = False
 projetor = False
 alarme_buzzer = False
 sensor_presenca = False
 sensor_fumaca = False
-sensor_janela_01 = False
-sensor_janela_02 = False
+sensor_janela_1 = False
+sensor_janela_2 = False
 sensor_contagem_pessoas_entrada = False
 sensor_contagem_pessoas_saida = False
 sensor_temperatura_humidade = False
 
 
+def serve(lampada_1):
+
+    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
+
+    clientSocket.connect((socket.gethostname(), 1234));
+
+    while True:
+
+        response = ""
+
+        dataFromServer = clientSocket.recv(1024)
+
+        #print(dataFromServer.decode())
+
+        function_dict = json.loads(dataFromServer.decode())
+        print(type(function_dict))
+        print(function_dict)
+
+        if "ligar_desligar_aparelho" in function_dict.keys():
+            print("Key ligar_desligar_aparelho encontrada")
+            interruptor_aparelhos(function_dict["ligar_desligar_aparelho"][0],function_dict["ligar_desligar_aparelho"][1])
+            response = {"Aparelho ligado/desligado":""}
+
+
+        if "Temperatura" in function_dict.keys():
+            response = leitor_temperatura()
+
+        else:
+            response = {"Default response":1}
+
+        clientSocket.send((json.dumps(response)).encode())
+
+
+t = threading.Thread(target=serve, args=(lampada_1, ))
+t.start()
+
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+# DEPRECATED
 def apresentar_relatorio_sala():
 
-    #print(".")
-    #print(f"Relatorio da Sala {numero_sala}")
-    #printar_status("Lampada 01             | ", lampada_1_ligada)
-    #printar_status("Lampada 02             | ", lampada_02)
-    #printar_status("Ar condicionado        | ", ar_condicionado)
-    #printar_status("Projetor               | ", projetor)
-    #printar_status("Alarme                 | ", alarme_buzzer)
-    #printar_status("Sensor presenca        | ", sensor_presenca)
-    #printar_status("Sensor fumaca          | ", sensor_fumaca)
-    #printar_status("Sensor janela 01       | ", sensor_janela_01)
-    #printar_status("Sensor janela 02       | ", sensor_janela_02)
-    #printar_status("Sensor entrada pessoas | ", sensor_contagem_pessoas_entrada)
-    #printar_status("Sensor saida pessoas   | ", sensor_contagem_pessoas_saida)
-    #printar_status("Sensor temperatura     | ", sensor_temperatura_humidade)
-    #print(".")
+    print(".")
+    print(f"Relatorio da Sala {numero_sala}")
+    print("Lampada 01             | ", lampada_1)
+    print("Lampada 02             | ", lampada_2)
+    print("Ar condicionado        | ", ar_condicionado)
+    print("Projetor               | ", projetor)
+    print("Alarme                 | ", alarme_buzzer)
+    print("Sensor presenca        | ", sensor_presenca)
+    print("Sensor fumaca          | ", sensor_fumaca)
+    print("Sensor janela 01       | ", sensor_janela_1)
+    print("Sensor janela 02       | ", sensor_janela_2)
+    print("Sensor entrada pessoas | ", sensor_contagem_pessoas_entrada)
+    print("Sensor saida pessoas   | ", sensor_contagem_pessoas_saida)
+    print("Sensor temperatura     | ", sensor_temperatura_humidade)
+    print(".")
 
     dict_relatorio = {
-    'Lampada01':lampada_1_ligada,
-    'Lampada02':lampada_02,
+    'Lampada01':lampada_1,
+    'Lampada02':lampada_2,
     'Arcondicionado':ar_condicionado,
     'Projetor':projetor,
     'Alarme':alarme_buzzer,
     'Sensorpresenca':sensor_presenca,
     'Sensorfumaca':sensor_fumaca,
-    'Sensorjanela01':sensor_janela_01,
-    'Sensorjanela02':sensor_janela_02,
+    'Sensorjanela01':sensor_janela_1,
+    'Sensorjanela02':sensor_janela_2,
     'Sensorentradapessoas':sensor_contagem_pessoas_entrada,
     'Sensorsaidapessoas':sensor_contagem_pessoas_saida,
     'Sensortemperatura':sensor_temperatura_humidade}
@@ -88,65 +97,45 @@ def apresentar_relatorio_sala():
     json_object = json.dumps(dict_relatorio)
     
     return json_object
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-def ligar_lampadas():
-    pass
-    #led_1.on()
-    #led_2.on()
-
-def desligar_lampadas():
-    pass
-    #led_1.off()
-    #led_2.off()
-
-
-def printar_status( aparelho: str, estado: bool):
-    if estado:
-        print(f"{aparelho} ligado")
-    else:
-        print(f"{aparelho} desligado")
+def leitor_temperatura():
+    dict_relatorio = {'Temperatura':random.uniform(-10,40)}
+    return dict_relatorio
 
 def interruptor_aparelhos( aparelho: int, estado: bool):
-    if aparelho == '0':
-        lampada_1_ligada = estado
-        led_1.on()
-        return estado
-    if aparelho == '1':
-        lampada_02 = estado
-    if aparelho == '2':
-        ar_condicionado = estado
-    if aparelho == '3':
-        projetor = estado
-    if aparelho == '4':
-        alarme_buzzer = estado
-    if aparelho == '5':
-        sensor_presenca = estado
-    if aparelho == '6':
-        sensor_fumaca = estado
-    if aparelho == '7':
-        sensor_janela_01 = estado
-    if aparelho == '8':
-        sensor_janela_02 = estado
-    if aparelho == '9':
-        sensor_contagem_pessoas_entrada = estado
-    if aparelho == '10':
-        sensor_contagem_pessoas_saida = estado
-    if aparelho == '11':
-        sensor_temperatura_humidade = estado
 
+    print(f"Interruptor chamado, aparelho {aparelho} estado {estado}")
 
-controle = '1'
+    if aparelho == 0:
+        if estado:
+            print("Ligando lampada 1")
+            #led_1.on()
+        else:
+            print("Desligando lampada 1")
+            #led_1.off()
 
-while controle != '0':
-    print("Menu")
-    print("1 - Ligar lampadas")
-    print("2 - Desligar lampadas")
-    print("0 - Encerrar")
+    if aparelho == 1:
+        if estado:
+            print("Ligando lampada 2")
+            #led_2.on()
+        else:
+            print("Desligando lampada 2")
+            #led_2.off()
 
-    controle = input()
+    if aparelho == 2:
+        if estado:
+            print("Ligando ar condicionado")
+            #led_3.on()
+        else:
+            print("Desligando ar condicionado")
+            #led_3.off()
 
-    if controle == '1':
-        ligar_lampadas()
-
-    if controle == '2':
-        desligar_lampadas()
+    if aparelho == 3:
+        if estado:
+            print("Ligando Projetor")
+            #led_3.on()
+        else:
+            print("Desligando Projetor")
+            #led_3.off()
+   
