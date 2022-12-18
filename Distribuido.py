@@ -123,7 +123,6 @@ def leitor_temperatura():
 
         except RuntimeError as error:
             print(error.args[0])
-            time.sleep(2.0)
             continue
         except Exception as error:
             dhtDevice.exit()
