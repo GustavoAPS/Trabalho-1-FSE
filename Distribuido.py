@@ -9,9 +9,6 @@ from gpiozero import LED
 
 
 numero_sala = 0
-
-#led_1 = LED(18)
-#led_2 = LED(23)
 lampada_1 = False
 lampada_2 = False
 ar_condicionado = False
@@ -108,37 +105,46 @@ def leitor_temperatura():
 
 def interruptor_aparelhos( aparelho: int, estado: bool):
 
+    #lampada 1
+    led_1 = LED(18)
+    #lampada 2
+    led_2 = LED(23)
+    #ar condicionado
+    led_3 = LED(25)
+    #projetor
+    led_4 = LED(24)
+
     print(f"Interruptor chamado, aparelho {aparelho} estado {estado}")
 
     if aparelho == 0:
         if estado:
             print("Ligando lampada 1")
-            #led_1.on()
+            led_1.on()
         else:
             print("Desligando lampada 1")
-            #led_1.off()
+            led_1.off()
 
     if aparelho == 1:
         if estado:
             print("Ligando lampada 2")
-            #led_2.on()
+            led_2.on()
         else:
             print("Desligando lampada 2")
-            #led_2.off()
+            led_2.off()
 
     if aparelho == 2:
         if estado:
             print("Ligando ar condicionado")
-            #led_3.on()
+            led_3.on()
         else:
             print("Desligando ar condicionado")
-            #led_3.off()
+            led_3.off()
 
     if aparelho == 3:
         if estado:
             print("Ligando Projetor")
-            #led_3.on()
+            led_3.on()
         else:
             print("Desligando Projetor")
-            #led_3.off()
+            led_3.off()
    
