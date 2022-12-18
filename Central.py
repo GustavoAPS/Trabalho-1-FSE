@@ -36,7 +36,7 @@ fila_respostas = []
 event = Event()
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serverSocket.bind((socket.gethostname(), 1234))
+serverSocket.bind((socket.gethostname(), 10091))
 serverSocket.listen(5)
 
 # Programa só vai prosseguir se tiver uma conexão

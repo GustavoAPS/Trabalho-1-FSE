@@ -4,6 +4,7 @@ import json
 import random
 import board
 import adafruit_dht
+
 from gpiozero import LED
 
 
@@ -29,7 +30,7 @@ def serve(lampada_1):
 
     clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
 
-    clientSocket.connect((socket.gethostname(), 1234));
+    clientSocket.connect((socket.gethostname(), 10091));
 
     while True:
 
@@ -128,7 +129,6 @@ def leitor_temperatura():
             dhtDevice.exit()
             raise error
 
-        time.sleep(2.0)
 
     dict_relatorio = {'Temperatura':random.uniform(-10,40)}
     return dict_relatorio
