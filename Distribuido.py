@@ -151,11 +151,18 @@ def interruptor_aparelhos( aparelho: int, estado: bool):
    
 
 
-button = Button(11)
+sensor_presenca = Button(7)
+sensor_fumaca = Button(1)
+sensor_janela = Button(12)
+sensor_porta  = Button(16)
+sensor_entrada = Button(20)
+sensor_saida = Button(21)
+
 
 while True:
-    if button.is_pressed:
-        print("Fumaca detectada")
-    else:
-        pass
-        print("Button is not pressed")
+
+    if sensor_presenca.is_pressed():
+        print("presenca detectada")
+    
+    if sensor_fumaca.is_pressed():
+        print("fumaca detectada")
