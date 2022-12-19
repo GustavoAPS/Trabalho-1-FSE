@@ -55,7 +55,7 @@ def send_messages(message:list):
 def receive_messages(fila_respostas):
     while True:
         dataFromClient = clientConnected.recv(1024)
-        #print(dataFromClient.decode())
+        #print("Data received = " + dataFromClient.decode())
         fila_respostas.append(json.loads(dataFromClient.decode()))
          
 
@@ -124,6 +124,7 @@ def AtualizaTemperatura(sala : info.Sala):
         sleep(1)
 
         #print("Pedindo temperatura")
+
         dict_relatorio = {'Temperatura':''}     
         json_object = json.dumps(dict_relatorio)
         fila_instrucoes.append(json_object)
@@ -143,8 +144,32 @@ thread_atualizar_temperatura = Thread(target=AtualizaTemperatura, args=(sala_01,
 thread_atualizar_temperatura.start()
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+def vigia_alarmes(fila_respostas):
+    while True:
+        for resposta in fila_respostas:
+            for i in resposta:
+                if i == "Sensor presenca disparado":
+                    print("Sensor presenca disparado")
+                    registrar_log("Sensor presenca disparado")
+                    fila_respostas.remove(resposta)
+
+                if i == "Sensor fumaca disparado":
+                    print("Sensor fumaca disparado")
+                    registrar_log("Sensor fumaca disparado")
+                    fila_respostas.remove(resposta)
+
+                if i == "Sensor janela disparado":
+                    print("Sensor Janela disparado")
+                    registrar_log("Sensor janela disparado")
+                    fila_respostas.remove(resposta)
+
+thread_vigiar_alarme = Thread(target=vigia_alarmes, args=(fila_respostas, ))
+thread_vigiar_alarme.start()
+
+
 while True:
-    
+
     try:
         print("Menu")
         print("1 - Ligar ou Desligar Aparelhos")
