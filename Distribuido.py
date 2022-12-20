@@ -112,7 +112,7 @@ def apresentar_relatorio_sala():
 def leitor_temperatura():
     dict_relatorio = {'Temperatura':random.uniform(-10,40)}
 
-    dhtDevice = adafruit_dht.DHT22(board.D4)
+    dhtDevice = adafruit_dht.DHT22(board.D4, use_pulseio=False)
 
     try:
         temperature_c = dhtDevice.temperature
@@ -193,9 +193,9 @@ def interruptor_aparelhos( aparelho: int, estado: bool):
 sensor_presenca = Button(7)
 sensor_fumaca = Button(1)
 sensor_janela = Button(12)
-#sensor_porta  = Button(16)
-#sensor_entrada = Button(20)
-#sensor_saida = Button(21)
+sensor_porta  = Button(16)
+sensor_entrada = Button(20)
+sensor_saida = Button(21)
 
 
 while True:
@@ -217,7 +217,17 @@ while True:
     if sensor_janela.is_pressed == False:
         #print("Janela detectada")
         fila_mensagens_para_envio.append({"Sensor janela disparado":""})
+
+    if sensor_entrada.is_pressed == False:
+        print("Pessoa entrou")
+        sleep(0.05)
+        #fila_mensagens_para_envio.append({"Sensor janela disparado":""})
         
+    if sensor_saida.is_pressed == False:
+        print("Pessoa saiu")
+        sleep(0.05)
+        #fila_mensagens_para_envio.append({"Sensor janela disparado":""})
+
     #if sensor_fumaca.is_pressed():
     #    print("fumaca detectada")
-    sleep(1)
+    
