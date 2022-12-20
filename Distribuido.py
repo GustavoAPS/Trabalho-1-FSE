@@ -3,8 +3,8 @@ import socket
 import json
 import random
 from time import sleep
-#import board
-#import adafruit_dht
+import board
+import adafruit_dht
 
 
 from gpiozero import LED, Button, Buzzer
@@ -111,6 +111,26 @@ def apresentar_relatorio_sala():
 
 def leitor_temperatura():
     dict_relatorio = {'Temperatura':random.uniform(-10,40)}
+
+    dhtDevice = adafruit_dht.DHT22(board.D4)
+
+    try:
+        temperature_c = dhtDevice.temperature
+        temperature_f = temperature_c * (9 / 5) + 32
+        humidity = dhtDevice.humidity
+        print(
+            "Temperatura: {:.1f} F / {:.1f} C    Umidade: {}% ".format(
+                temperature_f, temperature_c, humidity
+            )
+        )
+
+    except RuntimeError as error:
+        print(error.args[0])
+
+    except Exception as error:
+        dhtDevice.exit()
+        raise error
+
     return dict_relatorio
 
 def interruptor_aparelhos( aparelho: int, estado: bool):
