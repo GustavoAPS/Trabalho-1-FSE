@@ -35,8 +35,12 @@ fila_instrucoes = []
 fila_respostas = []
 event = Event()
 
+ip_servidor = '192.168.0.53'
+porta = 10091
+
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serverSocket.bind((socket.gethostname(), 10091))
+serverSocket.bind((ip_servidor, porta))
+
 serverSocket.listen(5)
 
 # Programa só vai prosseguir se tiver uma conexão

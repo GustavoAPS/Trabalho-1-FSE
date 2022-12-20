@@ -27,10 +27,10 @@ sensor_temperatura_humidade = False
 #mensagens no formato json
 fila_mensagens_para_envio = []
 
-
+servidor = ('192.168.0.53', 10091)
 
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
-clientSocket.connect((socket.gethostname(), 10091));
+clientSocket.connect((socket.gethostname(), 10092));
 
 
 def metodo_recebimento_mensagens(fila_mensagens):
@@ -59,7 +59,7 @@ def metodo_envio_mensagens(fila_mensagens:dict):
         if len(fila_mensagens) != 0:
             print(fila_mensagens)
             for mensagem in fila_mensagens:
-                clientSocket.send((json.dumps(mensagem)).encode())
+                clientSocket.sendto((json.dumps(mensagem)).encode(), servidor)
             fila_mensagens.clear()
 
 
