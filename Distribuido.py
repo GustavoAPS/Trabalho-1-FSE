@@ -7,7 +7,7 @@ from time import sleep
 #import adafruit_dht
 
 
-from gpiozero import LED, Button
+from gpiozero import LED, Button, Buzzer
 
 
 numero_sala = 0
@@ -123,6 +123,8 @@ def interruptor_aparelhos( aparelho: int, estado: bool):
     led_3 = LED(25)
     #projetor
     led_4 = LED(24)
+    #alarme 
+    alarme_buzzer = Buzzer(8)
 
     print(f"Interruptor chamado, aparelho {aparelho} estado {estado}")
 
@@ -157,8 +159,16 @@ def interruptor_aparelhos( aparelho: int, estado: bool):
         else:
             print("Desligando Projetor")
             led_4.off()
-   
 
+    if aparelho == 4:
+        if estado:
+            print("Ligando Alarme")
+            alarme_buzzer.on()
+        else:
+            print("Desligando Projetor")
+            alarme_buzzer.off()
+   
+    sleep(3)
 
 sensor_presenca = Button(7)
 sensor_fumaca = Button(1)
