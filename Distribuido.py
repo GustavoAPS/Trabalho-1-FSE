@@ -2,6 +2,7 @@ import threading
 import socket
 import json
 import random
+from time import sleep
 #import board
 #import adafruit_dht
 
@@ -49,10 +50,6 @@ def metodo_recebimento_mensagens(fila_mensagens):
         if "Temperatura" in dicionario_resposta.keys():       
             fila_mensagens.append(leitor_temperatura())
 
-            
-            
-        else:
-            fila_mensagens.append({"Default response":1})
 
 
 
@@ -119,47 +116,47 @@ def leitor_temperatura():
 def interruptor_aparelhos( aparelho: int, estado: bool):
 
     #lampada 1
-    #led_1 = LED(18)
+    led_1 = LED(18)
     #lampada 2
-    #led_2 = LED(23)
+    led_2 = LED(23)
     #ar condicionado
-    #led_3 = LED(25)
+    led_3 = LED(25)
     #projetor
-    #led_4 = LED(24)
+    led_4 = LED(24)
 
     print(f"Interruptor chamado, aparelho {aparelho} estado {estado}")
 
     if aparelho == 0:
         if estado:
             print("Ligando lampada 1")
-            #led_1.on()
+            led_1.on()
         else:
             print("Desligando lampada 1")
-            #led_1.off()
+            led_1.off()
 
     if aparelho == 1:
         if estado:
             print("Ligando lampada 2")
-            #led_2.on()
+            led_2.on()
         else:
             print("Desligando lampada 2")
-            #led_2.off()
+            led_2.off()
 
     if aparelho == 2:
         if estado:
             print("Ligando ar condicionado")
-            #led_3.on()
+            led_3.on()
         else:
             print("Desligando ar condicionado")
-            #led_3.off()
+            led_3.off()
 
     if aparelho == 3:
         if estado:
             print("Ligando Projetor")
-            #led_4.on()
+            led_4.on()
         else:
             print("Desligando Projetor")
-            #led_4.off()
+            led_4.off()
    
 
 
@@ -176,20 +173,21 @@ while True:
     #entrada = input("1 entrada, 2 presenca")
 
     #if entrada == '1':
-    if sensor_presenca.is_pressed():
+    if sensor_presenca.is_pressed == False:
         #print("presenca detectada")
         fila_mensagens_para_envio.append({"Sensor presenca disparado":""})
     
     
     #if entrada == '2':
-    if sensor_fumaca.is_pressed():
+    if sensor_fumaca.is_pressed == False:
         #print("fumaca detectada")
         fila_mensagens_para_envio.append({"Sensor fumaca disparado":""})
 
     #if entrada == '3':
-    if sensor_janela.is_pressed():
+    if sensor_janela.is_pressed == False:
         #print("Janela detectada")
         fila_mensagens_para_envio.append({"Sensor janela disparado":""})
         
     #if sensor_fumaca.is_pressed():
     #    print("fumaca detectada")
+    sleep(1)
