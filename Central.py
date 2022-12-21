@@ -175,7 +175,7 @@ thread_atualizar_temperatura.start()
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-def vigia_alarmes(fila_respostas):
+def vigia_alarmes(fila_respostas, fila_intrucoes_classe):
     while True:
         sleep(1)
         for resposta in fila_respostas:
@@ -189,13 +189,17 @@ def vigia_alarmes(fila_respostas):
                     #print("Sensor fumaca disparado")
                     registrar_log("Sensor fumaca disparado")
                     fila_respostas.remove(resposta)
+                    
+                    json_object = json.dumps({'ligar_desligar_aparelho':[4,True]})
+                    #envio da instrução para o distribuido
+                    fila_intrucoes_classe.append(json_object)
 
                 if i == "Sensor janela disparado":
                     #print("Sensor Janela disparado")
                     registrar_log("Sensor janela disparado")
                     fila_respostas.remove(resposta)
 
-thread_vigiar_alarme = Thread(target=vigia_alarmes, args=(fila_respostas, ))
+thread_vigiar_alarme = Thread(target=vigia_alarmes, args=(fila_respostas,fila_instrucoes, ))
 thread_vigiar_alarme.start()
 
 
