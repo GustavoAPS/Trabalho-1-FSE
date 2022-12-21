@@ -27,10 +27,11 @@ sensor_temperatura_humidade = False
 #mensagens no formato json
 fila_mensagens_para_envio = []
 
-servidor = ('192.168.0.53', 10091)
+servidor = '164.41.98.26'
+port = 10091
 
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
-clientSocket.connect((socket.gethostname(), 10092));
+clientSocket.connect((servidor, port));
 
 
 def metodo_recebimento_mensagens(fila_mensagens):
