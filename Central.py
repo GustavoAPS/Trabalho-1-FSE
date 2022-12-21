@@ -37,7 +37,7 @@ def send_messages(message:list):
         if len(message) != 0:
             clientConnected.send(bytes(message[len(message) - 1], "utf-8"))
             message.pop()
-            sleep(0.1)
+            sleep(0.75)
 
 
 # THREAD RECEBER MENSAGEM
@@ -175,31 +175,39 @@ thread_atualizar_temperatura.start()
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-def vigia_alarmes(fila_respostas, fila_intrucoes_classe):
+def vigia_alarmes(fila_respostas, fila_intrucoes_classe, sala):
     while True:
-        sleep(1)
         for resposta in fila_respostas:
             for i in resposta:
                 if i == "Sensor presenca disparado":
                     #print("Sensor presenca disparado")
+                    if sala.sistema_alarme == True:
+                        json_object = json.dumps({'ligar_desligar_aparelho':[4,True]})
+                        fila_instrucoes_classe.append(json_object)
+                        print("EMERGENCIA - Sala invadida")
+                        register.log("EMERGENCIA - Sala invadida")
                     registrar_log("Sensor presenca disparado")
                     fila_respostas.remove(resposta)
 
-                if i == "Sensor fumaca disparado":
-                    #print("Sensor fumaca disparado")
-                    registrar_log("Sensor fumaca disparado")
+
+                elif i == "Sensor fumaca disparado":
+                    print("EMERGENCIA - Sensor fumaca disparado")
+                    registrar_log("EMERGENCIA - Sensor fumaca disparado")
                     fila_respostas.remove(resposta)
-                    
                     json_object = json.dumps({'ligar_desligar_aparelho':[4,True]})
                     #envio da instrução para o distribuido
                     fila_intrucoes_classe.append(json_object)
 
-                if i == "Sensor janela disparado":
+
+                elif i == "Sensor janela disparado":
                     #print("Sensor Janela disparado")
                     registrar_log("Sensor janela disparado")
                     fila_respostas.remove(resposta)
 
-thread_vigiar_alarme = Thread(target=vigia_alarmes, args=(fila_respostas,fila_instrucoes, ))
+                else:
+                    pass
+
+thread_vigiar_alarme = Thread(target=vigia_alarmes, args=(fila_respostas,fila_instrucoes,sala_01, ))
 thread_vigiar_alarme.start()
 
 
