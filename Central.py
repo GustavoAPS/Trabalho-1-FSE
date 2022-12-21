@@ -229,8 +229,8 @@ while True:
             sala_01.relatorio_sala()
             registrar_log("Requisicao de relatorio")
 
-        if controle == '1':
-            ligar_desligar_alarme()
+        if controle == '3':
+            ligar_desligar_alarme(sala_01)
 
     except KeyboardInterrupt:
         event.set()
