@@ -45,8 +45,8 @@ def metodo_recebimento_mensagens(fila_mensagens):
             print("Key ligar_desligar_aparelho encontrada")
             interruptor_aparelhos(dicionario_resposta["ligar_desligar_aparelho"][0],dicionario_resposta["ligar_desligar_aparelho"][1])
             fila_mensagens.append({"Aparelho ligado/desligado":""})
-            
-        if "Temperatura" in dicionario_resposta.keys():       
+
+        if "Temperatura" in dicionario_resposta.keys():
             fila_mensagens.append(leitor_temperatura())
 
 
@@ -54,7 +54,7 @@ def metodo_recebimento_mensagens(fila_mensagens):
 
 def metodo_envio_mensagens(fila_mensagens:dict):
     while True:
-        
+
         if len(fila_mensagens) != 0:
             print(fila_mensagens)
             for mensagem in fila_mensagens:
@@ -82,7 +82,7 @@ def leitor_temperatura():
         temperature_f = temperature_c * (9 / 5) + 32
         humidity = dhtDevice.humidity
         dict_relatorio = {'Temperatura':dhtDevice.temperature}
-        #print("Temperatura: {:.1f} F / {:.1f} C    Umidade: {}% ".format(temperature_f, temperature_c, humidity))
+        print("Temperatura: {:.1f} F / {:.1f} C    Umidade: {}% ".format(temperature_f, temperature_c, humidity))
 
     except RuntimeError as error:
         print(error.args[0])
@@ -98,18 +98,18 @@ def interruptor_aparelhos( aparelho: int, estado: bool):
 
     #lampada 1
     led_1 = LED(dicionario_configuracao["outputs"][0]["gpio"])
-    
+
     #lampada 2
-    led_2 = LED(dicionario_configuracao["outputs"][0]["gpio"])
-    
+    led_2 = LED(dicionario_configuracao["outputs"][1]["gpio"])
+
     #projetor
-    led_3 = LED(dicionario_configuracao["outputs"][0]["gpio"])
-    
+    led_3 = LED(dicionario_configuracao["outputs"][2]["gpio"])
+
     #ar-condicionado
-    led_4 = LED(dicionario_configuracao["outputs"][0]["gpio"])
-    
-    #alarme 
-    alarme_buzzer = Buzzer(dicionario_configuracao["outputs"][0]["gpio"])
+    led_4 = LED(dicionario_configuracao["outputs"][3]["gpio"])
+
+    #alarme
+    alarme_buzzer = Buzzer(dicionario_configuracao["outputs"][4]["gpio"])
 
     print(f"Interruptor chamado, aparelho {aparelho} estado {estado}")
 
@@ -168,7 +168,7 @@ while True:
     if sensor_presenca.is_pressed == False:
         #print("presenca detectada")
         fila_mensagens_para_envio.append({"Sensor presenca disparado":""})
-        
+
     if sensor_fumaca.is_pressed == False:
         #print("fumaca detectada")
         fila_mensagens_para_envio.append({"Sensor fumaca disparado":""})
@@ -183,10 +183,10 @@ while True:
 
     if sensor_entrada.is_pressed == False:
         print("Pessoa entrou")
-        sleep(0.05)
-        
+        sleep(0.31)
+
     if sensor_saida.is_pressed == False:
         print("Pessoa saiu")
-        sleep(0.05)
-    
-    
+        sleep(0.31)
+
+
