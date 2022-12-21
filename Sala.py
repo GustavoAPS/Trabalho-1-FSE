@@ -28,7 +28,7 @@ class Sala:
       print(f"|Sistema Alarme   ON") if self.lampada_1 else print(      f"|Sistema Alarme   OFF")
       print( "|                                              ")
       print(f"|Ocupantes: {self.numero_pessoas}")
-      print(f"|-{self.temperatura_umidade}-")
+      print(f"|{self.temperatura_umidade}%")
       print(f"|")
       print(f"|Lampada 1        ON") if self.lampada_1 else print(      f"|Lampada 1        OFF")
       print(f"|Lampada 2        ON") if self.lampada_2 else print(      f"|Lampada 2        OFF")

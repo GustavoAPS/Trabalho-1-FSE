@@ -125,6 +125,27 @@ def ligar_desligar_aparelhos():
     sala_01.interruptor_aparelhos(int(aparelho),valor_em_bool)
 
 
+def ligar_desligar_alarme(sala):
+
+    print("\n")
+    print(" _____________ Sistema de Alarme _____________")
+    print("|                                              |")
+    print("| 0 - desligar          1 = Ligar              |")
+    print("|                                              |")
+    print("|==============================================|\n")
+
+    escolha = input()
+
+    if escolha == '0':
+        sala.sistema_alarme = False
+        print("Sistema de alarme desligado")
+        registrar_log("Sistema de alarme desligado")
+
+    if escolha == '1':
+        sala.sistema_alarme = True
+        print("Sistema de alarme ligado")
+        registrar_log("Sistema de alarme ligado")
+
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 def AtualizaTemperatura(sala):
 
@@ -188,9 +209,8 @@ while True:
         print("| O que deseja fazer?                          |")
         print("|                                              |")
         print("| 1 - Ligar ou Desligar Aparelhos              |")
-        print("| 2 - relatorio de sala                        |")
-        print("| 3 - ? ? ?                                    |")
-        print("| 4 - ? ? ?                                    |")
+        print("| 2 - Relatorio de sala                        |")
+        print("| 3 - Sistema de Alarme                        |")
         print("|                                              |")
         print("|==============================================|\n")
 
@@ -204,6 +224,9 @@ while True:
         if controle == '2':
             sala_01.relatorio_sala()
             registrar_log("Requisicao de relatorio")
+
+        if controle == '1':
+            ligar_desligar_alarme()
 
     except KeyboardInterrupt:
         event.set()
