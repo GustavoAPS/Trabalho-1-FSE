@@ -48,7 +48,7 @@ def metodo_recebimento_mensagens(fila_mensagens):
 
 def metodo_envio_mensagens(fila_mensagens:dict):
     while True:
-        sleep(0.1)
+        sleep(0.15)
         if len(fila_mensagens) != 0:
             print(fila_mensagens)
             for mensagem in fila_mensagens:

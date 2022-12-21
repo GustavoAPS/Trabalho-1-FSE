@@ -42,7 +42,7 @@ def receive_messages(fila_respostas):
         dataFromClient = clientConnected.recv(1024)
         print("Data received = " + dataFromClient.decode())
         fila_respostas.append(json.loads(dataFromClient.decode()))
-        sleep(0.1)
+        sleep(0.15)
 
 t = Thread(target=send_messages, args=(fila_instrucoes, ))
 t.start()
