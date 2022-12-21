@@ -79,22 +79,29 @@ def registrar_log(mensagem_registro):
 def ligar_desligar_aparelhos():
 
     print("\n")
-    print(" _____________ Ligar | Desligar _____________")
-    print("|                                            |\n")
-    print("| Qual aparelho voce deseja ligar-desligar?  |")
-    print("| 1 - Ligar ou Desligar Aparelhos            |")
-    print("| 2 - relatorio de sala                      |")
-    print("| 0 = lampada_01                             |")
-    print("| 1 = lampada_02                             |")
-    print("| 2 = projetor                               |")
-    print("| 3 = ar condicionado                        |")
-    print("| 4 = Alarme                                 |")
-    print("|============================================|\n")
-
+    print(" ______________ Ligar | Desligar ______________")
+    print("|                                              |\n")
+    print("| Qual aparelho voce deseja ligar/desligar?    |")
+    print("|                                              |")
+    print("| 0 - lampada 1         4 = Alarme Manualmente |")
+    print("| 1 - lampada 2         5 = Lampadas           |")
+    print("| 2 - projetor          6 - tudo               |")
+    print("| 3 - ar condicionado                          |")
+    print("|                                              |")
+    print("|==============================================|\n")
 
     aparelho = input()
 
-    estado = input("O que voce deseja fazer \n1 = ligar\n0 = desligar\n")
+    print("\n")
+    print(" ______________________________________________")
+    print("|                                              |\n")
+    print("| Qual aparelho voce deseja ligar-desligar?    |")
+    print("|                                              |")
+    print("| 0 - desligar          1 = Ligar              |")
+    print("|                                              |")
+    print("|==============================================|\n")
+
+    estado = input()
 
     valor_em_bool = True
 
@@ -169,12 +176,18 @@ thread_vigiar_alarme.start()
 while True:
 
     try:
+
         print("\n")
-        print(" _______________ Menu_______________")
-        print("|                                   |")
-        print("| 1 - Ligar ou Desligar Aparelhos   |")
-        print("| 2 - relatorio de sala             |")
-        print("|===================================|\n")
+        print(" _______________ Menu Principal _______________")
+        print("|                                              |\n")
+        print("| O que deseja fazer?                          |")
+        print("|                                              |")
+        print("| 1 - Ligar ou Desligar Aparelhos              |")
+        print("| 2 - relatorio de sala                        |")
+        print("| 3 - ? ? ?                                    |")
+        print("| 4 - ? ? ?                                    |")
+        print("|                                              |")
+        print("|==============================================|\n")
 
 
         controle = input()
@@ -185,7 +198,7 @@ while True:
 
         if controle == '2':
             sala_01.relatorio_sala()
-            registrar_log("Relatorio pedido")
+            registrar_log("Requisicao de relatorio")
 
     except KeyboardInterrupt:
         event.set()

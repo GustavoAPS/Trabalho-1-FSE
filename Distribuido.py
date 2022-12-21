@@ -52,7 +52,7 @@ def metodo_envio_mensagens(fila_mensagens:dict):
         if len(fila_mensagens) != 0:
             print(fila_mensagens)
             for mensagem in fila_mensagens:
-                clientSocket.sendto((json.dumps(mensagem)).encode(), servidor)
+                clientSocket.sendto((json.dumps(mensagem)).encode(), (servidor, port))
             fila_mensagens.clear()
 
 
