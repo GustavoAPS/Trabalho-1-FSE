@@ -40,7 +40,7 @@ def send_messages(message:list):
 def receive_messages(fila_respostas):
     while True:
         dataFromClient = clientConnected.recv(1024)
-        print("Data received = " + dataFromClient.decode())
+        #print("Data received = " + dataFromClient.decode())
         fila_respostas.append(json.loads(dataFromClient.decode()))
         sleep(0.15)
 
@@ -80,7 +80,7 @@ def ligar_desligar_aparelhos():
 
     print("\n")
     print(" ______________ Ligar | Desligar ______________")
-    print("|                                              |\n")
+    print("|                                              |")
     print("| Qual aparelho voce deseja ligar/desligar?    |")
     print("|                                              |")
     print("| 0 - lampada 1         4 = Alarme Manualmente |")
@@ -94,7 +94,7 @@ def ligar_desligar_aparelhos():
 
     print("\n")
     print(" ______________________________________________")
-    print("|                                              |\n")
+    print("|                                              |")
     print("| Qual aparelho voce deseja ligar-desligar?    |")
     print("|                                              |")
     print("| 0 - desligar          1 = Ligar              |")
@@ -155,17 +155,17 @@ def vigia_alarmes(fila_respostas):
         for resposta in fila_respostas:
             for i in resposta:
                 if i == "Sensor presenca disparado":
-                    print("Sensor presenca disparado")
+                    #print("Sensor presenca disparado")
                     registrar_log("Sensor presenca disparado")
                     fila_respostas.remove(resposta)
 
                 if i == "Sensor fumaca disparado":
-                    print("Sensor fumaca disparado")
+                    #print("Sensor fumaca disparado")
                     registrar_log("Sensor fumaca disparado")
                     fila_respostas.remove(resposta)
 
                 if i == "Sensor janela disparado":
-                    print("Sensor Janela disparado")
+                    #print("Sensor Janela disparado")
                     registrar_log("Sensor janela disparado")
                     fila_respostas.remove(resposta)
 
@@ -179,7 +179,7 @@ while True:
 
         print("\n")
         print(" _______________ Menu Principal _______________")
-        print("|                                              |\n")
+        print("|                                              |")
         print("| O que deseja fazer?                          |")
         print("|                                              |")
         print("| 1 - Ligar ou Desligar Aparelhos              |")
