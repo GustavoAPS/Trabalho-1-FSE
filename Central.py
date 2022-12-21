@@ -15,6 +15,7 @@ fila_instrucoes = []
 fila_respostas = []
 event = Event()
 
+
 ip_servidor = '164.41.98.26'
 porta = 10091
 
@@ -23,9 +24,12 @@ serverSocket.bind((ip_servidor, porta))
 
 serverSocket.listen(5)
 
+print("Aguardando servidor distribuido . . . ")
+
 # Programa só vai prosseguir se tiver uma conexão
 (clientConnected, clientAddress) = serverSocket.accept()
 
+print("Distribuido Conectado")
 
 # THREAD MANDAR MENSAGEM
 def send_messages(message:list):
@@ -61,16 +65,16 @@ def registrar_log(mensagem_registro):
             writter.writerow(data)
 
     now = datetime.now()
-    
+
     # dd/mm/YY H:M:S
     data_do_registro = now.strftime("%d/%m/%Y")
     hora_do_registro = now.strftime("%H:%M:%S")
 
     List = [mensagem_registro, data_do_registro, hora_do_registro]
-    
+
     with open('log.csv', 'a') as f_object:
-    
-        writer_object = writer(f_object)    
+
+        writer_object = writer(f_object)
         writer_object.writerow(List)
         f_object.close()
 
@@ -122,7 +126,7 @@ def ligar_desligar_aparelhos():
 
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-def AtualizaTemperatura(sala : info.Sala):
+def AtualizaTemperatura(sala):
 
     while True:
         sleep(1)
@@ -140,11 +144,12 @@ def AtualizaTemperatura(sala : info.Sala):
         for resposta in fila_respostas:
             for i in resposta:
                 if i == "Temperatura":
-                    sala.atualiza_temperatura(resposta[i])
+                    temp = resposta[i]
+                    sala.temperatura_umidade = resposta[i]
                     fila_respostas.remove(resposta)
 
 
-thread_atualizar_temperatura = Thread(target=AtualizaTemperatura, args=(sala_01, ))
+thread_atualizar_temperatura = Thread(target=AtualizaTemperatura, args=(sala_01,))
 thread_atualizar_temperatura.start()
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
