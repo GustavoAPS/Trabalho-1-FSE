@@ -146,7 +146,7 @@ def interruptor_aparelhos( aparelho: int, estado: bool):
         else:
             print("Desligando Alarme")
             alarme_buzzer.off()
-   
+
     sleep(3)
 
 sensor_presenca = Button(dicionario_configuracao["inputs"][0]["gpio"])
@@ -159,28 +159,31 @@ sensor_saida =    Button(dicionario_configuracao["inputs"][5]["gpio"])
 
 while True:
 
+    if sensor_entrada.is_pressed == False:
+        print("Entrada Detectada")
+        sleep(0.31)
+
+    if sensor_saida.is_pressed == False:
+        print("Saida Detectada")
+        sleep(0.31)
+
     if sensor_presenca.is_pressed == False:
         #print("presenca detectada")
         fila_mensagens_para_envio.append({"Sensor presenca disparado":""})
+        sleep(0.5)
 
     if sensor_fumaca.is_pressed == False:
         #print("fumaca detectada")
         fila_mensagens_para_envio.append({"Sensor fumaca disparado":""})
+        sleep(0.5)
 
     if sensor_janela.is_pressed == False:
         #print("Janela detectada")
         fila_mensagens_para_envio.append({"Sensor janela disparado":""})
+        sleep(0.5)
 
     if sensor_porta.is_pressed == False:
         #print("Janela detectada")
         fila_mensagens_para_envio.append({"Sensor porta disparado":""})
-
-    if sensor_entrada.is_pressed == False:
-        print("Pessoa entrou")
-        sleep(0.31)
-
-    if sensor_saida.is_pressed == False:
-        print("Pessoa saiu")
-        sleep(0.31)
-
+        sleep(0.5)
 
