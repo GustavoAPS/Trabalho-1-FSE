@@ -67,16 +67,19 @@ thread_recebimento_mensagem.start()
 
 def leitor_temperatura():
 
-    dict_relatorio = {'Temperatura':0}
-
+    dict_relatorio = {'Temperatura':""}
     dhtDevice = adafruit_dht.DHT22(board.D4, use_pulseio=False)
+    complemento = "Temperatura: "
 
     try:
         temperature_c = dhtDevice.temperature
         temperature_f = temperature_c * (9 / 5) + 32
         humidity = dhtDevice.humidity
-        dict_relatorio = {'Temperatura':dhtDevice.temperature}
-        print("Temperatura: {:.1f} F / {:.1f} C    Umidade: {}% ".format(temperature_f, temperature_c, humidity))
+        complemento += str(dhtDevice.temperature)
+        complemento += " Umidade: "
+        complemento += str(dhtDevice.humidity)
+        dict_relatorio = {'Temperatura':complemento}
+        #dict_relatorio = {"temperatura":str("Temperatura: {:.1f} F / {:.1f} C    Umidade: {}% ".format(temperature_f, temperature_c, humidity))}
 
     except RuntimeError as error:
         print(error.args[0])
