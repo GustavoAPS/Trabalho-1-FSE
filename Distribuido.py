@@ -17,10 +17,6 @@ dicionario_configuracao = []
 with open(sys.argv[1]) as arquivo_entrada:
     dicionario_configuracao = json.load(arquivo_entrada)
 
-#Exemplo de acesso a lampada 01
-#dicionario_configuracao["outputs"][0]["gpio"]
-
-
 
 #mensagens no formato json
 fila_mensagens_para_envio = []
@@ -34,7 +30,7 @@ clientSocket.connect((servidor, port));
 
 def metodo_recebimento_mensagens(fila_mensagens):
     while True:
-
+        sleep(0.1)
         dataFromServer = clientSocket.recv(1024)
         dicionario_resposta = json.loads(dataFromServer.decode())
 
@@ -50,11 +46,9 @@ def metodo_recebimento_mensagens(fila_mensagens):
             fila_mensagens.append(leitor_temperatura())
 
 
-
-
 def metodo_envio_mensagens(fila_mensagens:dict):
     while True:
-
+        sleep(0.1)
         if len(fila_mensagens) != 0:
             print(fila_mensagens)
             for mensagem in fila_mensagens:
