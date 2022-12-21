@@ -35,7 +35,7 @@ fila_instrucoes = []
 fila_respostas = []
 event = Event()
 
-ip_servidor = '192.168.0.53'
+ip_servidor = '164.41.98.26'
 porta = 10091
 
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
