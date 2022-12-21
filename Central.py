@@ -1,4 +1,3 @@
-# imports
 from threading import Thread, Event
 from csv import writer
 from time import sleep
@@ -61,7 +60,7 @@ def receive_messages(fila_respostas):
         dataFromClient = clientConnected.recv(1024)
         #print("Data received = " + dataFromClient.decode())
         fila_respostas.append(json.loads(dataFromClient.decode()))
-         
+
 
 t = Thread(target=send_messages, args=(fila_instrucoes, ))
 t.start()
@@ -97,14 +96,14 @@ def registrar_log(mensagem_registro):
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 def ligar_desligar_aparelhos():
-    
+
     aparelho = input("Qual aparelho voce deseja ligar-desligar? \n"
                         "0 = lampada_01\n"
                         "1 = lampada_02\n"
                         "2 = projetor\n"
                         "3 = ar condicionado\n"
-                        "4 = Alarme")
-    
+                        "4 = Alarme\n")
+
     estado = input("O que voce deseja fazer \n1 = ligar\n0 = desligar\n")
 
     valor_em_bool = True
@@ -130,10 +129,10 @@ def AtualizaTemperatura(sala : info.Sala):
 
         #print("Pedindo temperatura")
 
-        dict_relatorio = {'Temperatura':''}     
+        dict_relatorio = {'Temperatura':''}
         json_object = json.dumps(dict_relatorio)
         fila_instrucoes.append(json_object)
-        
+
         sleep(1)
 
         #print(f"Respostas = {fila_respostas}")
@@ -143,7 +142,7 @@ def AtualizaTemperatura(sala : info.Sala):
                 if i == "Temperatura":
                     sala.atualiza_temperatura(resposta[i])
                     fila_respostas.remove(resposta)
-        
+
 
 thread_atualizar_temperatura = Thread(target=AtualizaTemperatura, args=(sala_01, ))
 thread_atualizar_temperatura.start()
@@ -176,16 +175,23 @@ thread_vigiar_alarme.start()
 while True:
 
     try:
-        print("Menu")
-        print("1 - Ligar ou Desligar Aparelhos")
-        print("2 - relatorio de sala")
-        print("0 - Encerrar")
+        print("\n")
+        print(" _______________ Menu_______________")
+        print("|                                   |")
+        print("| 1 - Ligar ou Desligar Aparelhos   |")
+        print("| 2 - relatorio de sala             |")
+        print("|===================================|\n")
+
 
         controle = input()
 
         if controle == '1':
             ligar_desligar_aparelhos()
             registrar_log("Aparelho ligado")
+
+        if controle == '2':
+            sala_01.relatorio_sala()
+            registrar_log("Relatorio pedido")
 
     except KeyboardInterrupt:
         event.set()
