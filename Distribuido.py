@@ -30,8 +30,8 @@ clientSocket.connect((servidor, port));
 
 def metodo_recebimento_mensagens(fila_mensagens):
     while True:
-        sleep(0.1)
         dataFromServer = clientSocket.recv(1024)
+        print(dataFromServer.decode())
         dicionario_resposta = json.loads(dataFromServer.decode())
 
 
@@ -40,11 +40,12 @@ def metodo_recebimento_mensagens(fila_mensagens):
         if "ligar_desligar_aparelho" in dicionario_resposta.keys():
             print("Key ligar_desligar_aparelho encontrada")
             interruptor_aparelhos(dicionario_resposta["ligar_desligar_aparelho"][0],dicionario_resposta["ligar_desligar_aparelho"][1])
-            fila_mensagens.append({"Aparelho ligado/desligado":""})
+
 
         if "Temperatura" in dicionario_resposta.keys():
             fila_mensagens.append(leitor_temperatura())
 
+        sleep(0.5)
 
 def metodo_envio_mensagens(fila_mensagens:dict):
     while True:
@@ -159,15 +160,18 @@ sensor_porta  =   Button(dicionario_configuracao["inputs"][3]["gpio"])
 sensor_entrada =  Button(dicionario_configuracao["inputs"][4]["gpio"])
 sensor_saida =    Button(dicionario_configuracao["inputs"][5]["gpio"])
 
+pessoa = 0
 
 while True:
 
     if sensor_entrada.is_pressed == False:
-        print("Entrada Detectada")
+        print(f"Entrada Detectada {pessoa} ocupantes")
+        pessoa = pessoa + 1
         sleep(0.31)
 
     if sensor_saida.is_pressed == False:
-        print("Saida Detectada")
+        print(f"Saida Detectada {pessoa} ocupantes")
+        pessoa = pessoa - 1
         sleep(0.31)
 
     if sensor_presenca.is_pressed == False:
