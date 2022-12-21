@@ -101,8 +101,9 @@ def ligar_desligar_aparelhos():
     aparelho = input("Qual aparelho voce deseja ligar-desligar? \n"
                         "0 = lampada_01\n"
                         "1 = lampada_02\n"
-                        "2 = ar_condicionado\n"
-                        "3 = projetor\n")
+                        "2 = projetor\n"
+                        "3 = ar condicionado\n"
+                        "4 = Alarme")
     
     estado = input("O que voce deseja fazer \n1 = ligar\n0 = desligar\n")
 
@@ -185,11 +186,6 @@ while True:
         if controle == '1':
             ligar_desligar_aparelhos()
             registrar_log("Aparelho ligado")
-
-        if controle == '2':
-            sala_01.relatorio_sala()
-            registrar_log("relatorio pedido")
-
 
     except KeyboardInterrupt:
         event.set()

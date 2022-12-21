@@ -1,28 +1,26 @@
-import threading
-import socket
+import sys
 import json
-import random
-from time import sleep
+import socket
+import threading
 import board
 import adafruit_dht
 
-
+from time import sleep
 from gpiozero import LED, Button, Buzzer
 
 
-numero_sala = 0
-lampada_1 = False
-lampada_2 = False
-ar_condicionado = False
-projetor = False
-alarme_buzzer = False
-sensor_presenca = False
-sensor_fumaca = False
-sensor_janela_1 = False
-sensor_janela_2 = False
-sensor_contagem_pessoas_entrada = False
-sensor_contagem_pessoas_saida = False
-sensor_temperatura_humidade = False
+print("Config:")
+print(sys.argv[1])
+
+dicionario_configuracao = []
+
+with open(sys.argv[1]) as arquivo_entrada:
+    dicionario_configuracao = json.load(arquivo_entrada)
+
+#Exemplo de acesso a lampada 01
+#dicionario_configuracao["outputs"][0]["gpio"]
+
+
 
 #mensagens no formato json
 fila_mensagens_para_envio = []
@@ -72,46 +70,10 @@ thread_recebimento_mensagem = threading.Thread(target=metodo_envio_mensagens, ar
 thread_recebimento_mensagem.start()
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-# DEPRECATED - tenho que atualizar
-def apresentar_relatorio_sala():
-
-    print(".")
-    print(f"Relatorio da Sala {numero_sala}")
-    print("Lampada 01             | ", lampada_1)
-    print("Lampada 02             | ", lampada_2)
-    print("Ar condicionado        | ", ar_condicionado)
-    print("Projetor               | ", projetor)
-    print("Alarme                 | ", alarme_buzzer)
-    print("Sensor presenca        | ", sensor_presenca)
-    print("Sensor fumaca          | ", sensor_fumaca)
-    print("Sensor janela 01       | ", sensor_janela_1)
-    print("Sensor janela 02       | ", sensor_janela_2)
-    print("Sensor entrada pessoas | ", sensor_contagem_pessoas_entrada)
-    print("Sensor saida pessoas   | ", sensor_contagem_pessoas_saida)
-    print("Sensor temperatura     | ", sensor_temperatura_humidade)
-    print(".")
-
-    dict_relatorio = {
-    'Lampada01':lampada_1,
-    'Lampada02':lampada_2,
-    'Arcondicionado':ar_condicionado,
-    'Projetor':projetor,
-    'Alarme':alarme_buzzer,
-    'Sensorpresenca':sensor_presenca,
-    'Sensorfumaca':sensor_fumaca,
-    'Sensorjanela01':sensor_janela_1,
-    'Sensorjanela02':sensor_janela_2,
-    'Sensorentradapessoas':sensor_contagem_pessoas_entrada,
-    'Sensorsaidapessoas':sensor_contagem_pessoas_saida,
-    'Sensortemperatura':sensor_temperatura_humidade}
-
-    json_object = json.dumps(dict_relatorio)
-    
-    return json_object
-#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 def leitor_temperatura():
-    dict_relatorio = {'Temperatura':random.uniform(-10,40)}
+
+    dict_relatorio = {'Temperatura':0}
 
     dhtDevice = adafruit_dht.DHT22(board.D4, use_pulseio=False)
 
@@ -119,11 +81,8 @@ def leitor_temperatura():
         temperature_c = dhtDevice.temperature
         temperature_f = temperature_c * (9 / 5) + 32
         humidity = dhtDevice.humidity
-        print(
-            "Temperatura: {:.1f} F / {:.1f} C    Umidade: {}% ".format(
-                temperature_f, temperature_c, humidity
-            )
-        )
+        dict_relatorio = {'Temperatura':dhtDevice.temperature}
+        #print("Temperatura: {:.1f} F / {:.1f} C    Umidade: {}% ".format(temperature_f, temperature_c, humidity))
 
     except RuntimeError as error:
         print(error.args[0])
@@ -134,18 +93,23 @@ def leitor_temperatura():
 
     return dict_relatorio
 
+
 def interruptor_aparelhos( aparelho: int, estado: bool):
 
     #lampada 1
-    led_1 = LED(18)
+    led_1 = LED(dicionario_configuracao["outputs"][0]["gpio"])
+    
     #lampada 2
-    led_2 = LED(23)
-    #ar condicionado
-    led_3 = LED(25)
+    led_2 = LED(dicionario_configuracao["outputs"][0]["gpio"])
+    
     #projetor
-    led_4 = LED(24)
+    led_3 = LED(dicionario_configuracao["outputs"][0]["gpio"])
+    
+    #ar-condicionado
+    led_4 = LED(dicionario_configuracao["outputs"][0]["gpio"])
+    
     #alarme 
-    alarme_buzzer = Buzzer(8)
+    alarme_buzzer = Buzzer(dicionario_configuracao["outputs"][0]["gpio"])
 
     print(f"Interruptor chamado, aparelho {aparelho} estado {estado}")
 
@@ -167,18 +131,18 @@ def interruptor_aparelhos( aparelho: int, estado: bool):
 
     if aparelho == 2:
         if estado:
-            print("Ligando ar condicionado")
+            print("Ligando projetor")
             led_3.on()
         else:
-            print("Desligando ar condicionado")
+            print("Desligando projetor")
             led_3.off()
 
     if aparelho == 3:
         if estado:
-            print("Ligando Projetor")
+            print("Ligando ar-condicionado")
             led_4.on()
         else:
-            print("Desligando Projetor")
+            print("Desligando ar-condicionado")
             led_4.off()
 
     if aparelho == 4:
@@ -186,49 +150,43 @@ def interruptor_aparelhos( aparelho: int, estado: bool):
             print("Ligando Alarme")
             alarme_buzzer.on()
         else:
-            print("Desligando Projetor")
+            print("Desligando Alarme")
             alarme_buzzer.off()
    
     sleep(3)
 
-sensor_presenca = Button(7)
-sensor_fumaca = Button(1)
-sensor_janela = Button(12)
-sensor_porta  = Button(16)
-sensor_entrada = Button(20)
-sensor_saida = Button(21)
+sensor_presenca = Button(dicionario_configuracao["inputs"][0]["gpio"])
+sensor_fumaca =   Button(dicionario_configuracao["inputs"][1]["gpio"])
+sensor_janela =   Button(dicionario_configuracao["inputs"][2]["gpio"])
+sensor_porta  =   Button(dicionario_configuracao["inputs"][3]["gpio"])
+sensor_entrada =  Button(dicionario_configuracao["inputs"][4]["gpio"])
+sensor_saida =    Button(dicionario_configuracao["inputs"][5]["gpio"])
 
 
 while True:
 
-    #entrada = input("1 entrada, 2 presenca")
-
-    #if entrada == '1':
     if sensor_presenca.is_pressed == False:
         #print("presenca detectada")
         fila_mensagens_para_envio.append({"Sensor presenca disparado":""})
-    
-    
-    #if entrada == '2':
+        
     if sensor_fumaca.is_pressed == False:
         #print("fumaca detectada")
         fila_mensagens_para_envio.append({"Sensor fumaca disparado":""})
 
-    #if entrada == '3':
     if sensor_janela.is_pressed == False:
         #print("Janela detectada")
         fila_mensagens_para_envio.append({"Sensor janela disparado":""})
 
+    if sensor_porta.is_pressed == False:
+        #print("Janela detectada")
+        fila_mensagens_para_envio.append({"Sensor porta disparado":""})
+
     if sensor_entrada.is_pressed == False:
         print("Pessoa entrou")
         sleep(0.05)
-        #fila_mensagens_para_envio.append({"Sensor janela disparado":""})
         
     if sensor_saida.is_pressed == False:
         print("Pessoa saiu")
         sleep(0.05)
-        #fila_mensagens_para_envio.append({"Sensor janela disparado":""})
-
-    #if sensor_fumaca.is_pressed():
-    #    print("fumaca detectada")
+    
     
