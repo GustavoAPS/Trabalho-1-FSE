@@ -1,13 +1,13 @@
 class Sala:
   def __init__(self):
     
-    self.numero_sala = 0
-
     self.numero_pessoas = 0
-
-    self.temperatura = 0.00
+    self.temperatura_umidade = ""
 
     #false para desligado, true para ligado
+    
+    self.sistema_alarme = False
+    
     self.lampada_1 = False
     self.lampada_2 = False
     self.ar_condicionado = False
@@ -21,21 +21,29 @@ class Sala:
 
 
   def relatorio_sala(self):
-      print(f"------------------------------------------")
-      print(f"Dados da Sala {self.numero_sala}")
-      print(f"")
-      print(f"Ocupantes: {self.numero_pessoas}")
-      print(f"temperatura: {self.temperatura}")
-      print(f"")
-      print(f"Lampada 1        ON") if self.lampada_1 else print(      f"Lampada 1        OFF")
-      print(f"Lampada 2        ON") if self.lampada_2 else print(      f"Lampada 2        OFF")
-      print(f"Ar condicionado  ON") if self.ar_condicionado else print(f"Ar condicionado  OFF")
-      print(f"Projetor         ON") if self.projetor else print(      f"Projetor         OFF")
-      print(f"------------------------------------------")
+
+      print("\n")
+      print( " ___________________ Status Sala ___________________")
+      print( "|")
+      print(f"|Sistema Alarme   ON") if self.lampada_1 else print(      f"|Sistema Alarme   OFF")
+      print( "|                                              ")
+      print(f"|Ocupantes: {self.numero_pessoas}")
+      print(f"|{self.temperatura_umidade}")
+      print(f"|")
+      print(f"|Lampada 1        ON") if self.lampada_1 else print(      f"|Lampada 1        OFF")
+      print(f"|Lampada 2        ON") if self.lampada_2 else print(      f"|Lampada 2        OFF")
+      print(f"|Ar condicionado  ON") if self.ar_condicionado else print(f"|Ar condicionado  OFF")
+      print(f"|Projetor         ON") if self.projetor else print(       f"|Projetor         OFF")
+      print( "|                                              ")
+      print( "|==============================================|\n")
 
 
-  def atualiza_temperatura(self, temperatura):
-    self.temperatura = temperatura
+  def atualiza_temperatura_umidade(self, temperatura):
+    self.temperatura_humidade = temperatura
+
+
+  def atualiza_ocupantes(self, ocupantes):
+    self.numero_pessoas = ocupantes
 
 
   def interruptor_aparelhos(self, aparelho: int, estado: bool):
@@ -51,7 +59,3 @@ class Sala:
 
     if aparelho == 3:
       self.projetor = estado
-
-
-  def atualiza_dados(self):
-      print("atualiza dados chamado")
